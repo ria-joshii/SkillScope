@@ -22,8 +22,8 @@ AI-powered OSCE (Objective Structured Clinical Examination) assessment and feedb
 
 1. **Clone and install dependencies**
    ```bash
-   git clone <repository-url>
-   cd osce-feedback-system
+   git clone https://github.com/Vai-Sur05/RUHeathHack-Team8.git
+   cd RUHeathHack-Team8
    npm install --legacy-peer-deps
    ```
 
@@ -96,7 +96,8 @@ src/
 
 ## 🎨 Design Philosophy
 
-- **Medical-Friendly Theme**: Blue/teal color scheme inspired by EMR systems
+- **RWJ Color Scheme**: Red, black, and white theme inspired by Robert Wood Johnson
+- **Medical-Friendly Theme**: Clean, professional design for medical education
 - **Accessibility**: WCAG compliant components
 - **Responsive Design**: Mobile-first approach
 - **Clean Interface**: Minimal, focused user experience
