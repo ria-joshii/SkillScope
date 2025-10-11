@@ -251,7 +251,7 @@ def main():
     text = generate_with_retries(PRIMARY_MODEL, active_file, DEFAULT_TIMEOUT_SEC)
     
     output_dir.mkdir(parents=True, exist_ok=True)
-    outfile = output_dir / f"{input_file.stem}_analysis.json"
+    outfile = output_dir / f"{input_file.stem}_analysis.pdf"
     outfile.write_text(text, encoding="utf-8")
     print(str(outfile))
 
