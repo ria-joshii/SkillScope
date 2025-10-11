@@ -1,100 +1,149 @@
 #!/usr/bin/env python3
 import sys
-import re
+import json
 import datetime as dt
 from pathlib import Path
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, XPreformatted, Table, TableStyle
-
-EMOJI_PATTERN = re.compile(
-    "["
-    "\U0001F300-\U0001F5FF"
-    "\U0001F600-\U0001F64F"
-    "\U0001F680-\U0001F6FF"
-    "\U0001F700-\U0001F77F"
-    "\U0001F780-\U0001F7FF"
-    "\U0001F800-\U0001F8FF"
-    "\U0001F900-\U0001F9FF"
-    "\U0001FA00-\U0001FAFF"
-    "\U00002702-\U000027B0"
-    "\U000024C2-\U0001F251"
-    "]+",
-    flags=re.UNICODE,
-)
-
-def strip_emojis(text: str) -> str:
-    text = EMOJI_PATTERN.sub("", text)
-    text = re.sub(r"[^\S\n\t\r ]+", "", text)
-    return text
-
-def looks_like_transcript_line(line: str) -> bool:
-    return bool(re.match(r"^\[\d{2}:\d{2}:\d{2}(?:[,\.]\d{3})?\s*-->\s*\d{2}:\d{2}:\d{2}(?:[,\.]\d{3})?\]\s+\w+", line))
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 
 def on_page(canvas, doc):
     canvas.saveState()
-    canvas.setFont("HeiseiMin-W3", 9)
+    canvas.setFont("Helvetica", 9)
     canvas.setFillColor(colors.gray)
     canvas.drawRightString(doc.pagesize[0] - doc.rightMargin, 0.5 * inch, f"Page {doc.page}")
     canvas.restoreState()
 
-def build_pdf(input_txt: Path, output_pdf: Path, title: str):
-    pdfmetrics.registerFont(UnicodeCIDFont("HeiseiMin-W3"))
+def build_pdf(input_json: Path, output_pdf: Path, title: str):
+    data = json.loads(input_json.read_text(encoding="utf-8"))
     styles = getSampleStyleSheet()
     
-    base = ParagraphStyle("Base", parent=styles["Normal"], fontName="HeiseiMin-W3", fontSize=10.5, leading=14, spaceAfter=6, textColor=colors.black)
-    h1 = ParagraphStyle("H1", parent=styles["Heading1"], fontName="HeiseiMin-W3", fontSize=16, leading=20, textColor=colors.HexColor("#CC0033"), spaceAfter=10)
-    h2 = ParagraphStyle("H2", parent=styles["Heading2"], fontName="HeiseiMin-W3", fontSize=12.5, leading=16, textColor=colors.HexColor("#333333"), spaceAfter=6)
-    mono = ParagraphStyle("Mono", parent=base, fontName="HeiseiMin-W3", leading=14)
-
-    doc = SimpleDocTemplate(str(output_pdf), pagesize=LETTER, rightMargin=54, leftMargin=54, topMargin=64, bottomMargin=60, title=title, author="OSCE Pipeline")
+    h1 = ParagraphStyle("H1", parent=styles["Heading1"], fontSize=18, textColor=colors.HexColor("#CC0033"), spaceAfter=12, alignment=1)
+    h2 = ParagraphStyle("H2", parent=styles["Heading2"], fontSize=14, textColor=colors.HexColor("#333333"), spaceAfter=8, spaceBefore=12)
+    body = ParagraphStyle("Body", parent=styles["Normal"], fontSize=10, leading=14, spaceAfter=6)
     
-    raw = input_txt.read_text(encoding="utf-8", errors="ignore")
-    clean = strip_emojis(raw)
+    doc = SimpleDocTemplate(str(output_pdf), pagesize=LETTER, rightMargin=54, leftMargin=54, topMargin=64, bottomMargin=60)
     story = []
     
-    story.append(Paragraph(title, h1))
-    meta_table = Table([["Source file:", str(input_txt.name)], ["Generated:", dt.datetime.now().strftime("%Y-%m-%d %H:%M")]], colWidths=[1.4*inch, 4.8*inch])
-    meta_table.setStyle(TableStyle([("FONTNAME", (0,0), (-1,-1), "HeiseiMin-W3"), ("FONTSIZE", (0,0), (-1,-1), 9.5), ("TEXTCOLOR", (0,0), (0,-1), colors.HexColor("#666666")), ("BOTTOMPADDING", (0,0), (-1,-1), 4)]))
-    story.append(meta_table)
-    story.append(Spacer(1, 0.2*inch))
-
-    lines = clean.splitlines()
-    transcriptish = sum(looks_like_transcript_line(l) for l in lines) >= max(10, int(0.2 * len(lines)))
+    # Header
+    story.append(Paragraph("OSCE Evaluation Report", h1))
+    story.append(Paragraph(f"Rutgers Robert Wood Johnson Medical School", body))
+    story.append(Paragraph(f"Generated: {dt.datetime.now().strftime('%B %d, %Y at %I:%M %p')}", body))
+    story.append(Spacer(1, 0.3*inch))
     
-    if transcriptish:
-        story.append(Paragraph("Transcript", h2))
-        chunk, char_count = [], 0
-        for line in lines:
-            chunk.append(line)
-            char_count += len(line)
-            if char_count > 5000:
-                story.append(XPreformatted("\n".join(chunk), mono))
-                story.append(Spacer(1, 0.12*inch))
-                chunk, char_count = [], 0
-        if chunk:
-            story.append(XPreformatted("\n".join(chunk), mono))
-    else:
-        story.append(Paragraph("Content", h2))
-        paragraphs = re.split(r"\n\s*\n", clean.strip())
-        for p in paragraphs:
-            p = p.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-            story.append(Paragraph(p.replace("\n", "<br/>"), base))
-            story.append(Spacer(1, 0.06*inch))
-
+    # Aggregate Scores
+    agg = data.get("aggregate_scores", {})
+    story.append(Paragraph("Overall Performance", h2))
+    
+    score_data = [
+        ["Metric", "Score", "Status"],
+        ["Critical Actions Checklist", f"{agg.get('checklist_percent', 0)}%", "Pass" if agg.get('checklist_percent', 0) >= 70 else "Fail"],
+        ["Communication & Empathy", f"{agg.get('communication_percent', 0)}%", "Pass" if agg.get('communication_percent', 0) >= 70 else "Fail"],
+        ["Clinical Reasoning (Post-Note)", f"{agg.get('post_note_score', 0)}/10", "Pass" if agg.get('post_note_score', 0) >= 6 else "Fail"],
+        ["Overall Result", "", "PASS" if agg.get('passed', False) else "FAIL"]
+    ]
+    
+    score_table = Table(score_data, colWidths=[3*inch, 1.5*inch, 1.2*inch])
+    score_table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#CC0033")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("ALIGN", (1,0), (-1,-1), "CENTER"),
+        ("BACKGROUND", (0,4), (-1,4), colors.HexColor("#f0f0f0")),
+        ("FONTNAME", (0,4), (-1,4), "Helvetica-Bold"),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 8),
+        ("TOPPADDING", (0,0), (-1,-1), 8),
+    ]))
+    story.append(score_table)
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Feedback Summary
+    story.append(Paragraph("Summary Feedback", h2))
+    story.append(Paragraph(data.get("feedback_summary", "No feedback available."), body))
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Critical Actions
+    rubric = data.get("rubric_evaluation", {})
+    checklist = rubric.get("critical_action_checklist", [])
+    if checklist:
+        story.append(Paragraph("Critical Action Checklist", h2))
+        for item in checklist:
+            status = "✓" if item.get("met") else "✗"
+            color = "green" if item.get("met") else "red"
+            criterion = item.get('criterion', '')[:100]
+            story.append(Paragraph(f"<font color='{color}'>{status}</font> <b>{criterion}</b>", body))
+            if item.get("evidence"):
+                evidence = item.get('evidence', '')[:200]
+                story.append(Paragraph(f"&nbsp;&nbsp;&nbsp;&nbsp;<i>Evidence: {evidence}</i>", body))
+        story.append(Spacer(1, 0.2*inch))
+    
+    # Communication Scores
+    comm = rubric.get("empathy_clarity_scale", {})
+    if comm:
+        story.append(Paragraph("Communication & Empathy Assessment", h2))
+        comm_data = [["Domain", "Score", "Comment"]]
+        for key, val in comm.items():
+            comm_data.append([key.replace("_", " ").title(), f"{val.get('score', 0)}/5", val.get('comment', '')])
+        
+        comm_table = Table(comm_data, colWidths=[1.8*inch, 0.7*inch, 4*inch])
+        comm_table.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#333333")),
+            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+            ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+            ("FONTSIZE", (0,0), (-1,-1), 9),
+            ("ALIGN", (1,0), (1,-1), "CENTER"),
+            ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+            ("VALIGN", (0,0), (-1,-1), "TOP"),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 8),
+            ("TOPPADDING", (0,0), (-1,-1), 8),
+            ("WORDWRAP", (0,0), (-1,-1), True),
+        ]))
+        story.append(comm_table)
+        story.append(Spacer(1, 0.2*inch))
+    
+    # Clinical Reasoning
+    clin = rubric.get("clinical_reasoning", {})
+    if clin:
+        story.append(Paragraph("Clinical Reasoning (Post-Note)", h2))
+        clin_data = [
+            ["Component", "Score"],
+            ["Epidemiology & Patient Profile", f"{clin.get('epidemiology_profile', 0)}/2"],
+            ["Prioritized Problem Cues", f"{clin.get('prioritized_problem_cues', 0)}/2"],
+            ["Problem Statement", f"{clin.get('problem_statement', 0)}/2"],
+            ["Differential Diagnosis", f"{clin.get('differential_diagnosis', 0)}/2"],
+            ["Diagnostic Plan", f"{clin.get('diagnostic_plan', 0)}/2"],
+            ["Total", f"{clin.get('total_score', 0)}/10"]
+        ]
+        
+        clin_table = Table(clin_data, colWidths=[4*inch, 1.5*inch])
+        clin_table.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#333333")),
+            ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+            ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+            ("BACKGROUND", (0,-1), (-1,-1), colors.HexColor("#f0f0f0")),
+            ("FONTNAME", (0,-1), (-1,-1), "Helvetica-Bold"),
+            ("FONTSIZE", (0,0), (-1,-1), 10),
+            ("ALIGN", (1,0), (1,-1), "CENTER"),
+            ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+            ("TOPPADDING", (0,0), (-1,-1), 6),
+        ]))
+        story.append(clin_table)
+    
     doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         sys.exit(1)
     
-    input_txt = Path(sys.argv[1])
+    input_json = Path(sys.argv[1])
     output_pdf = Path(sys.argv[2])
     title = sys.argv[3] if len(sys.argv) > 3 else "OSCE Evaluation Report"
     
-    build_pdf(input_txt, output_pdf, title)
+    build_pdf(input_json, output_pdf, title)
     print(str(output_pdf))

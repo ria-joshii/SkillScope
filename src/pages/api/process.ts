@@ -36,7 +36,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Generate PDF
     const pdfPath = outputFile.replace('.json', '.pdf');
     const pdfScript = path.join(process.cwd(), 'scripts', 'generate_pdf.py');
-    await execAsync(`python3 "${pdfScript}" "${outputFile}" "${pdfPath}" "OSCE Evaluation Report"`);
+    try {
+      await execAsync(`python3 "${pdfScript}" "${outputFile}" "${pdfPath}" "OSCE Evaluation Report"`);
+    } catch (pdfError) {
+      console.error('PDF generation failed:', pdfError);
+    }
 
     sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
     const completedSession = sessions.find((s: any) => s.unique_id === sessionId);

@@ -1,0 +1,531 @@
+{
+  "transcript": [
+    {
+      "timestamp": "00:00:06",
+      "speaker": "STUDENT",
+      "text": "Come in."
+    },
+    {
+      "timestamp": "00:00:09",
+      "speaker": "STUDENT",
+      "text": "Miss Belllony?"
+    },
+    {
+      "timestamp": "00:00:09",
+      "speaker": "PATIENT",
+      "text": "Yes."
+    },
+    {
+      "timestamp": "00:00:11",
+      "speaker": "STUDENT",
+      "text": "Hi, I'm Tony, um Harris, I'll be your doctor today. Um let me just wash my hands really quick."
+    },
+    {
+      "timestamp": "00:00:20",
+      "speaker": "STUDENT",
+      "text": "Um, would you prefer Miss Belony or would you could I call you Pat?"
+    },
+    {
+      "timestamp": "00:00:23",
+      "speaker": "PATIENT",
+      "text": "Pat's fine."
+    },
+    {
+      "timestamp": "00:00:24",
+      "speaker": "STUDENT",
+      "text": "Great. Well, it's nice to meet you. Um, can you tell me why you're here today?"
+    },
+    {
+      "timestamp": "00:00:28",
+      "speaker": "PATIENT",
+      "text": "I have a terrible headache."
+    },
+    {
+      "timestamp": "00:00:30",
+      "speaker": "STUDENT",
+      "text": "Oh, looks really bad. Um, is there anything else besides your headache that you want to address here today at the clinical appointment?"
+    },
+    {
+      "timestamp": "00:00:37",
+      "speaker": "PATIENT",
+      "text": "Uh, no, it's just that except I am concerned I just recently changed insurance companies and I'm not sure this is going to be covered yet."
+    },
+    {
+      "timestamp": "00:00:47",
+      "speaker": "STUDENT",
+      "text": "All right. Um was there anything? Um because uh what we can do is while we're talking and I'm doing your history and physical, um I will have my office secretary look into the insurance plan that you have. Right. So you don't have to worry about that."
+    },
+    {
+      "timestamp": "00:01:03",
+      "speaker": "PATIENT",
+      "text": "All right. All right. That sounds good."
+    },
+    {
+      "timestamp": "00:01:04",
+      "speaker": "STUDENT",
+      "text": "Okay, sounds great. Um is there anything else?"
+    },
+    {
+      "timestamp": "00:01:09",
+      "speaker": "PATIENT",
+      "text": "No, I'm just this is just really bad."
+    },
+    {
+      "timestamp": "00:01:12",
+      "speaker": "STUDENT",
+      "text": "Okay. So, what I'd like to do today and um is let's let's take a look at what's causing your headache. Um I will go over history physical and then um we'll do again a physical exam and then we will look into your insurance policy and make sure that's all you know, taking care of. Does that sound like a good plan for you?"
+    },
+    {
+      "timestamp": "00:01:36",
+      "speaker": "PATIENT",
+      "text": "Okay. Okay. Yeah, that's that's good."
+    },
+    {
+      "timestamp": "00:01:37",
+      "speaker": "STUDENT",
+      "text": "Perfect. Um so tell me a little bit more about this the head head pain that you're having."
+    },
+    {
+      "timestamp": "00:01:46",
+      "speaker": "PATIENT",
+      "text": "Well, um it started about three days ago and um uh uh nothing has helped it. It's it's just laid me flat. I um haven't been able to go to work. Um it's um nothing's helped. I I um it's it's all over. Um I it really bad when I move, so I'm trying not to move too much and the light is bothering me a lot."
+    },
+    {
+      "timestamp": "00:02:24",
+      "speaker": "STUDENT",
+      "text": "Okay. Um and unfortunately, I can't dim the lights in this room, but still I'll try to go quickly and um would be okay if I took some notes?"
+    },
+    {
+      "timestamp": "00:02:33",
+      "speaker": "PATIENT",
+      "text": "Okay. It's okay. Oh, sure, yeah."
+    },
+    {
+      "timestamp": "00:02:34",
+      "speaker": "STUDENT",
+      "text": "All right. So, you said this headache started about three days ago. Okay. Um Was there any um anything that brought it on? Anything unusual that happened maybe three days ago?"
+    },
+    {
+      "timestamp": "00:02:54",
+      "speaker": "PATIENT",
+      "text": "Yeah, uh not really. No. Okay."
+    },
+    {
+      "timestamp": "00:02:59",
+      "speaker": "STUDENT",
+      "text": "Um, can you tell me uh anything that makes it better? Is there anything?"
+    },
+    {
+      "timestamp": "00:03:06",
+      "speaker": "PATIENT",
+      "text": "Oh, nothing's made it better. I I I took some Tylenol, I tried Motrin, nothing. Um, I just try not to move too much."
+    },
+    {
+      "timestamp": "00:03:20",
+      "speaker": "STUDENT",
+      "text": "All right. Um, is there anything that makes it worse? Like movement. Um, and and light. Okay. And um, it's just constant though. There's, you know, it it doesn't it's just constant. It's it's all over."
+    },
+    {
+      "timestamp": "00:03:41",
+      "speaker": "PATIENT",
+      "text": "Yeah."
+    },
+    {
+      "timestamp": "00:03:42",
+      "speaker": "STUDENT",
+      "text": "Okay. Um, so if you had to rate on a pain scale, um zero being no pain, 10 being the worst pain you ever had."
+    },
+    {
+      "timestamp": "00:03:53",
+      "speaker": "PATIENT",
+      "text": "Oh, it's a 10. I I've never had a headache like this."
+    },
+    {
+      "timestamp": "00:03:59",
+      "speaker": "STUDENT",
+      "text": "Okay. Yeah, that sounds really bad. Um now, as far as radiation, does it move? Does it you said the head the pain is all up at the front of your head?"
+    },
+    {
+      "timestamp": "00:04:08",
+      "speaker": "PATIENT",
+      "text": "It's kind of all over. Um but it it also I've got this shooting pain down my neck and my neck is is very stiff."
+    },
+    {
+      "timestamp": "00:04:22",
+      "speaker": "STUDENT",
+      "text": "Okay. Um but it's not it's it's it's it's the entire head."
+    },
+    {
+      "timestamp": "00:04:32",
+      "speaker": "STUDENT",
+      "text": "Entire head. Okay. Yeah. Um as far as in the in the timing, you said that uh started three days ago but is it you said it's a constant?"
+    },
+    {
+      "timestamp": "00:04:45",
+      "speaker": "PATIENT",
+      "text": "Yeah. Yeah, it it it it started gradually, but once once it got there, it's it hasn't gone away. It doesn't get better, doesn't get worse. It's just the same."
+    },
+    {
+      "timestamp": "00:05:04",
+      "speaker": "STUDENT",
+      "text": "Okay. Um so do you what I want to get is your perception of what you think is going on?"
+    },
+    {
+      "timestamp": "00:05:14",
+      "speaker": "PATIENT",
+      "text": "Oh, I don't know. I just I can hardly think. It's so painful. I I just um because it's so bad, I was afraid um my neighbor um had a headache and ignored it last year and uh he suddenly started having seizures and it turns out he had a um a brain tumor. So I thought I I just should come in and."
+    },
+    {
+      "timestamp": "00:05:44",
+      "speaker": "STUDENT",
+      "text": "Oh, yeah, I can understand your concern. Um, what how is it impacting your daily life?"
+    },
+    {
+      "timestamp": "00:05:52",
+      "speaker": "PATIENT",
+      "text": "I can't go to work. Um Uh I can't do anything. Yeah. Um"
+    },
+    {
+      "timestamp": "00:06:03",
+      "speaker": "STUDENT",
+      "text": "Okay. So it sounds like it's really impacting your life and. Okay. Um, if it's okay, I would like to go some talk about a little bit about your medical history and your social history. All right? Um, can you tell me as far as your medical history? Have do you have any medical conditions I should be aware of?"
+    },
+    {
+      "timestamp": "00:06:23",
+      "speaker": "PATIENT",
+      "text": "Um not um I was diagnosed with uh high blood pressure about three years ago, but uh we've been addressing it with diet changes and and been monitored. Yeah, I go in yearly I had been just and it's been well controlled, so Okay."
+    },
+    {
+      "timestamp": "00:06:30",
+      "speaker": "STUDENT",
+      "text": "Okay. Okay. So it's controlled."
+    },
+    {
+      "timestamp": "00:06:40",
+      "speaker": "PATIENT",
+      "text": "I haven't been on medication, but other than that, I haven't had any problems."
+    },
+    {
+      "timestamp": "00:06:46",
+      "speaker": "STUDENT",
+      "text": "No medications for that. Okay. Um any surgical history?"
+    },
+    {
+      "timestamp": "00:06:50",
+      "speaker": "PATIENT",
+      "text": "No.. Um any hospitalizations?"
+    },
+    {
+      "timestamp": "00:06:55",
+      "speaker": "PATIENT",
+      "text": "No."
+    },
+    {
+      "timestamp": "00:06:55",
+      "speaker": "STUDENT",
+      "text": "All right. Um and you said you're um the only medicine you're taking was the Tylenol, Moron, doesn't help."
+    },
+    {
+      "timestamp": "00:07:03",
+      "speaker": "PATIENT",
+      "text": "Yeah, and they didn't help, yeah."
+    },
+    {
+      "timestamp": "00:07:05",
+      "speaker": "STUDENT",
+      "text": "Okay. Just wanted to verify. Um do you have any drug allergies?"
+    },
+    {
+      "timestamp": "00:07:11",
+      "speaker": "PATIENT",
+      "text": "Uh no, no."
+    },
+    {
+      "timestamp": "00:07:13",
+      "speaker": "STUDENT",
+      "text": "Okay. Um what about family history? Um do you have any medical history of headaches or?"
+    },
+    {
+      "timestamp": "00:07:22",
+      "speaker": "PATIENT",
+      "text": "In my family? Right. Um you know, my mom said she used to get migraines when she was in her 20s and 30s. Um Okay. But I don't remember her saying anything else about it. My sister, uh I have one sister, she's she's healthy. My dad, uh he has high blood pressure, but other than that he's healthy and um that's about it. I don't I don't have any kids."
+    },
+    {
+      "timestamp": "00:07:57",
+      "speaker": "STUDENT",
+      "text": "All right. Um, so right I would like to ask you some social history questions that um just for the records. Do you smoke?"
+    },
+    {
+      "timestamp": "00:08:09",
+      "speaker": "PATIENT",
+      "text": "Okay. Uh yeah, I do. Okay."
+    },
+    {
+      "timestamp": "00:08:11",
+      "speaker": "STUDENT",
+      "text": "Um is it um cigarettes or chewing tobacco?"
+    },
+    {
+      "timestamp": "00:08:15",
+      "speaker": "PATIENT",
+      "text": "Yeah, cigarettes."
+    },
+    {
+      "timestamp": "00:08:16",
+      "speaker": "STUDENT",
+      "text": "Okay. And how much do you smoke?"
+    },
+    {
+      "timestamp": "00:08:18",
+      "speaker": "PATIENT",
+      "text": "Um about a half a pack a day."
+    },
+    {
+      "timestamp": "00:08:21",
+      "speaker": "STUDENT",
+      "text": "Okay. Uh what about alcohol?"
+    },
+    {
+      "timestamp": "00:08:24",
+      "speaker": "PATIENT",
+      "text": "I don't drink."
+    },
+    {
+      "timestamp": "00:08:26",
+      "speaker": "STUDENT",
+      "text": "Okay. Um also, um are you married?"
+    },
+    {
+      "timestamp": "00:08:33",
+      "speaker": "PATIENT",
+      "text": "Uh yeah, I'm married. Okay."
+    },
+    {
+      "timestamp": "00:08:36",
+      "speaker": "STUDENT",
+      "text": "And children?"
+    },
+    {
+      "timestamp": "00:08:39",
+      "speaker": "PATIENT",
+      "text": "No. Okay. And um just uh some some just some additional questions is um um looking at kind of GY history. Are you um last menstrual period?"
+    },
+    {
+      "timestamp": "00:08:57",
+      "speaker": "PATIENT",
+      "text": "Oh, I I'm in menopause. Okay. Yeah."
+    },
+    {
+      "timestamp": "00:09:06",
+      "speaker": "STUDENT",
+      "text": "Um, so going back into the history again, um have you um you said your mom had migraines um earlier on. Um have you been around in you know other you haven't been nauseous or have you been?"
+    },
+    {
+      "timestamp": "00:09:25",
+      "speaker": "PATIENT",
+      "text": "Yeah, I I've I I've been nauseous um uh in fact I threw up twice early on. Okay. Uh because when I move, it makes me nauseous."
+    },
+    {
+      "timestamp": "00:09:40",
+      "speaker": "STUDENT",
+      "text": "Okay. Yeah. Um nothing out of the ordinary over the past couple weeks. Have you been on any trips or anything? Or?"
+    },
+    {
+      "timestamp": "00:09:48",
+      "speaker": "PATIENT",
+      "text": "I actually a week ago I was in um North Carolina for a family reunion. Okay. And there was a four-year-old who was sick there. I I don't know what they had, but they were I guess I guess they ended up taking him into emergency. Right. So."
+    },
+    {
+      "timestamp": "00:10:15",
+      "speaker": "STUDENT",
+      "text": "Um, so let me just so summarize to make sure I've got everything straight so far is um you started having onset of a severe headache about three days ago. Um it's worse with movement. like light really makes it hurt bad. Um it's a 10 out of 10 pain and you're also complaining of a stiff neck with that."
+    },
+    {
+      "timestamp": "00:10:40",
+      "speaker": "PATIENT",
+      "text": "Yeah. Yes."
+    },
+    {
+      "timestamp": "00:10:43",
+      "speaker": "STUDENT",
+      "text": "Um it came on gradually and it's been constant pain in the frontal area. Um medical history, you're in hyper you have high blood pressure but that's um controlled with diet. Uh no surgical history, no really hospitalizations. Um the pain though isn't really impacting your day-to-day living daily life. Um you took tried to town and it didn't help, otherwise no medications. Um you've got the family history of your mom with migraines, otherwise your um family is healthy. Yeah. Uh you smoke about a half a pack a day. Do you don't drink. Um and then you were you did you said you took a trip about a week ago, two weeks ago?"
+    },
+    {
+      "timestamp": "00:11:42",
+      "speaker": "PATIENT",
+      "text": "Yeah. Yeah."
+    },
+    {
+      "timestamp": "00:11:44",
+      "speaker": "STUDENT",
+      "text": "Okay. Yeah. The we. A week ago. Uh yeah, I don't know. It was in North Carolina."
+    },
+    {
+      "timestamp": "00:11:53",
+      "speaker": "PATIENT",
+      "text": "That was a week ago. Okay."
+    },
+    {
+      "timestamp": "00:11:57",
+      "speaker": "STUDENT",
+      "text": "All right. Um yeah, I can understand your concern you about your friend you said that it was having seizures. Um, I've just never had this kind of pain before. Yeah, and I can understand that. And you know, um so what I would like to do is um we've pretty much gone over your the history. What I'd like to do is complete a physical exam. Um do some testing. All right. Um and I want to ask too if there's any other concerns I need to address before we get to the final exam."
+    },
+    {
+      "timestamp": "00:12:53",
+      "speaker": "PATIENT",
+      "text": "Okay. Okay. That that sounds good."
+    },
+    {
+      "timestamp": "00:12:56",
+      "speaker": "STUDENT",
+      "text": "Okay. Sounds great. Okay."
+    },
+    {
+      "timestamp": "00:13:13",
+      "speaker": "STUDENT",
+      "text": "All right. Hi, I'm Deb. I'm your standardized patient. All right. Nice to meet you brief. nice job. Um I'm going to uh give you some feedback on your communication skills uh in this encounter. But before I do, how did you feel?"
+    },
+    {
+      "timestamp": "00:13:41",
+      "speaker": "STUDENT",
+      "text": "All right. feel it went?"
+    },
+    {
+      "timestamp": "00:13:41",
+      "speaker": "STUDENT",
+      "text": "Um, I did pretty good. I was I was nervous at first I think and um just trying to make sure that um I was getting all your patient information so we could, you know, make sure we got the correct tests and."
+    },
+    {
+      "timestamp": "00:13:57",
+      "speaker": "PATIENT",
+      "text": "Yeah, yeah. Yeah. How did you feel when you when you walked in? Do you feel pretty comfortable?"
+    },
+    {
+      "timestamp": "00:14:01",
+      "speaker": "STUDENT",
+      "text": "Uh I think I got more comfortable as we sat down and got to talking."
+    },
+    {
+      "timestamp": "00:14:06",
+      "speaker": "PATIENT",
+      "text": "Yeah. I could see that. Yeah, good. Okay. Um, well, I thought you did a a nice job. Uh you had an appropriate introduction, introduced yourself, first and last name, shook hands. Um I think you have a very warm demeanor and you're comfortable uh which um makes me as a patient comfortable. You did um ex uh elicit my chief complaint and asked about any other concerns and that's when I told you I was also concerned about my insurance. So that was another uh thing on the agenda. So you did set in a mutual agenda, asked me if I agreed. And so we had a clear road map going forward. So you did um you hit all those real well. You your first question, tell me about this pain or um that was a nice open-ended question. So allowed me to then tell my story. Um, followed up with some more um pointed questions just to for clarification on um and you had you're an active listener, had good contact, eye contact and um could do a little bit more um uh reflective listening, um just to little points where you could verify, um, check for accuracy, maybe paraphrase as as I'm going through through. Um, you did a nice summary uh in the middle, that's good, but just a little bit more reflection on that to let me know as a patient that you're hearing me. Um, you asked my perspective of what I thought was going on and then you got the story um of my fear that maybe I've got a brain tumor. Oh no. Yeah. So um, I thought you had nice flow, logical um uh sequence of questioning. Um, little bit of sign posting. We just covered this and now we're going to do that. I I heard that once. Um and as these um interviews get longer, you're going to want to sign post between each um section. I've taken your history. Now I'd like to go into uh um of a physical exam or something. Um did a nice summary in the middle. Uh you move through quickly, so you attended to um the timeline. You did ask permission permission to ask some um uh social questions. Maybe you want to mention um social questions may not be a a flag for me that this is this could be personal or uncomfortable. Maybe I'm going to ask a little more some personal questions here. Is that all right with you? Just so I'm sounds fine to me until you start asking something that might sound personal. So you might use the the word uh some more personal questions here. Uh nonjudgmental didn't, you know, didn't bat an eye when when I said I smoke half a pack. Um, you have nice uh vocal range, eye contact, um comfortable demeanor. So uh that um felt real good. And then um, you uh did a summary uh at the end and um asked did you ask do anything else? Okay. So anything else before um we do a a physical exam. So it was very nice, nice encounter."
+    },
+    {
+      "timestamp": "00:18:42",
+      "speaker": "STUDENT",
+      "text": "Right. Well, thank you so much."
+    },
+    {
+      "timestamp": "00:18:43",
+      "speaker": "PATIENT",
+      "text": "Uhhuh."
+    },
+    {
+      "timestamp": "00:18:44",
+      "speaker": "STUDENT",
+      "text": "Nice meeting you."
+    },
+    {
+      "timestamp": "00:18:45",
+      "speaker": "PATIENT",
+      "text": "You too."
+    }
+  ],
+  "rubric_evaluation": {
+    "critical_action_checklist": [
+      {
+        "criterion": "Introduced self with name and role",
+        "met": true,
+        "evidence": "Introduced as Dr. Harris"
+      },
+      {
+        "criterion": "Confirmed patient's name and preferred name",
+        "met": true,
+        "evidence": "Confirmed patient name and preferred name"
+      },
+      {
+        "criterion": "Elicited the chief complaint",
+        "met": true,
+        "evidence": "Elicited Chief Complaint: Headache"
+      },
+      {
+        "criterion": "Confirmed or clarified the context and impact of the chief complaint",
+        "met": true,
+        "evidence": "Clarified impact of headache"
+      },
+      {
+        "criterion": "Asked about associated symptoms",
+        "met": true,
+        "evidence": "Asked about associated symptoms."
+      },
+      {
+        "criterion": "Asked about relevant past medical history",
+        "met": true,
+        "evidence": "Asked about relevant past medical history"
+      },
+      {
+        "criterion": "Asked about medications and allergies",
+        "met": true,
+        "evidence": "Asked about medications and allergies."
+      },
+      {
+        "criterion": "Asked about relevant family history",
+        "met": true,
+        "evidence": "Asked about relevant family history"
+      },
+      {
+        "criterion": "Asked about relevant social history",
+        "met": true,
+        "evidence": "Asked about smoking and alcohol"
+      },
+      {
+        "criterion": "Asked about patient concerns/expectations",
+        "met": true,
+        "evidence": "Asked about expectation/concern"
+      },
+      {
+        "criterion": "Summarized the history",
+        "met": true,
+        "evidence": "Summarized the history"
+      },
+      {
+        "criterion": "Outlined the next steps in the encounter",
+        "met": true,
+        "evidence": "Outlined next steps of physical exam and testing"
+      }
+    ],
+    "empathy_clarity_scale": {
+      "FosteringRelationship": {
+        "score": 4,
+        "comment": "The student demonstrated a warm demeanor and made efforts to make the patient comfortable. Could have used more verbal cues to show understanding."
+      },
+      "GatheringInformation": {
+        "score": 5,
+        "comment": "The student used open-ended questions effectively to gather information and then followed up with pointed questions for clarification."
+      },
+      "ProvidingInformation": {
+        "score": 4,
+        "comment": "The student provided clear explanations and checked for understanding. Outlined plan effectively."
+      },
+      "HelpingPatientDecisions": {
+        "score": 3,
+        "comment": "The student acknowledged patient concerns but could have explored them more deeply to facilitate shared decision-making.  Provided reassurance about insurance."
+      }
+    },
+    "clinical_reasoning": {
+      "epidemiology_profile": 2,
+      "prioritized_problem_cues": 2,
+      "problem_statement": 1,
+      "differential_diagnosis": 2,
+      "diagnostic_plan": 1,
+      "total_score": 8
+    }
+  },
+  "aggregate_scores": {
+    "checklist_percent": 100,
+    "communication_percent": 80,
+    "post_note_score": 8,
+    "passed": true
+  },
+  "feedback_summary": "The student conducted a thorough history-taking encounter. Strengths include establishing rapport, using open-ended questions, and summarizing information. Areas for improvement include incorporating more reflective listening techniques and exploring patient concerns in greater depth. The student outlined the next steps clearly and demonstrated a good understanding of the importance of addressing both the medical and personal aspects of the patient's complaint."
+}

@@ -15,7 +15,35 @@ DEFAULT_TIMEOUT_SEC = int(os.getenv("GEMINI_TIMEOUT_SEC", "1800"))
 MAX_RETRIES = int(os.getenv("GEMINI_MAX_RETRIES", "3"))
 RETRY_BASE_DELAY = float(os.getenv("GEMINI_RETRY_BASE", "5.0"))
 
-SYSTEM_PROMPT = """You are an AI OSCE evaluator. Analyze the medical student encounter and return JSON with: transcript (timestamped dialogue + actions), rubric_evaluation (critical_action_checklist, empathy_clarity_scale, clinical_reasoning), aggregate_scores (checklist_percent, communication_percent, post_note_score, passed), and feedback_summary. Be critical and evidence-based."""
+SYSTEM_PROMPT = """You are an AI OSCE evaluator. Analyze the medical student encounter and return ONLY valid JSON (no markdown, no code blocks) with this exact structure:
+{
+  "transcript": [{"timestamp": "00:00:00", "speaker": "STUDENT", "text": "..."}],
+  "rubric_evaluation": {
+    "critical_action_checklist": [{"criterion": "...", "met": true, "evidence": "..."}],
+    "empathy_clarity_scale": {
+      "FosteringRelationship": {"score": 4, "comment": "..."},
+      "GatheringInformation": {"score": 5, "comment": "..."},
+      "ProvidingInformation": {"score": 4, "comment": "..."},
+      "HelpingPatientDecisions": {"score": 3, "comment": "..."}
+    },
+    "clinical_reasoning": {
+      "epidemiology_profile": 2,
+      "prioritized_problem_cues": 2,
+      "problem_statement": 1,
+      "differential_diagnosis": 2,
+      "diagnostic_plan": 1,
+      "total_score": 8
+    }
+  },
+  "aggregate_scores": {
+    "checklist_percent": 75,
+    "communication_percent": 80,
+    "post_note_score": 8,
+    "passed": true
+  },
+  "feedback_summary": "..."
+}
+Be critical and evidence-based."""
 
 def ensure_api():
     genai.configure(api_key=API_KEY)
@@ -41,7 +69,11 @@ def generate_with_retries(model_name: str, file_obj, timeout_sec: int) -> str:
                 resp = model.generate_content([SYSTEM_PROMPT, file_obj], request_options={"timeout": timeout_sec})
                 text = resp.text.strip()
                 if text.startswith("```"):
-                    text = text.strip("` \n").split("\n", 1)[1] if "\n" in text else text
+                    lines = text.split("\n")
+                    text = "\n".join(lines[1:-1]) if len(lines) > 2 else text.strip("` ")
+                text = text.strip()
+                # Validate JSON
+                json.loads(text)
                 return text
             except Exception as e:
                 if attempt == MAX_RETRIES - 1:
