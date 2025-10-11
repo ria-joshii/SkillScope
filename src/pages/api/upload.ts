@@ -72,52 +72,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
 
     // Trigger async processing
-    const { exec } = require('child_process');
-    const processScript = `
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
-const { promisify } = require('util');
-const execAsync = promisify(exec);
-
-(async () => {
-  const sessionId = '${sessionId}';
-  const filePath = '${finalPath}';
-  const sessionsFile = path.join('${process.cwd()}', 'data', 'sessions.json');
-  
-  let sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
-  const session = sessions.find(s => s.unique_id === sessionId);
-  if (session) session.status = 'processing';
-  fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
-  
-  try {
-    const { stdout } = await execAsync('python3 "${path.join(process.cwd(), 'scripts', 'osce_analyzer.py')}" "' + filePath + '" "${path.join(process.cwd(), 'outputs')}"');
-    const outputFile = stdout.trim();
-    const pdfPath = outputFile.replace('.json', '.pdf');
-    
-    try {
-      await execAsync('python3 "${path.join(process.cwd(), 'scripts', 'generate_pdf.py')}" "' + outputFile + '" "' + pdfPath + '"');
-    } catch (e) {}
-    
-    sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
-    const done = sessions.find(s => s.unique_id === sessionId);
-    if (done) {
-      done.status = 'completed';
-      done.analysis_path = outputFile;
-      done.pdf_path = pdfPath;
-    }
-    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
-  } catch (error) {
-    sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
-    const failed = sessions.find(s => s.unique_id === sessionId);
-    if (failed) failed.status = 'failed';
-    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
-  }
-})();
-`;
-    exec(`node -e "${processScript.replace(/"/g, '\\"')}"`, (err) => {
-      if (err) console.error('Processing trigger failed:', err);
+    const { spawn } = require('child_process');
+    const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
+    const child = spawn('node', [processScript, sessionId, finalPath], { 
+      detached: true, 
+      stdio: 'ignore' 
     });
+    child.unref();
 
     return res.status(200).json({
       success: true,

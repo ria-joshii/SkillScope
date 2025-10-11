@@ -20,7 +20,7 @@ Your role is to evaluate standardized patient (SP) encounter videos for medical 
 You analyze **audio and visual behavior** to assess the student’s **Clinical Reasoning Process** and **Empathy & Clarity** communication skills.
 ---
 ## INPUT
-- A audio or video  of an OSCE encounter between a student and standardized patient.  
+- A audio of an OSCE encounter between a student and standardized patient.  
 - The video includes both dialogue and visible physical actions.
 ---
 ## STEP 1: MULTIMODAL TRANSCRIPT
@@ -208,7 +208,7 @@ def main():
     text = generate_with_retries(PRIMARY_MODEL, active_file, DEFAULT_TIMEOUT_SEC)
     
     output_dir.mkdir(parents=True, exist_ok=True)
-    outfile = output_dir / f"{input_file.stem}_analysis.pdf"
+    outfile = output_dir / f"{input_file.stem}_analysis.json"
     outfile.write_text(text, encoding="utf-8")
     print(str(outfile))
 
