@@ -1,0 +1,62 @@
+{
+  "transcript": [
+    {
+      "timestamp": "0:00",
+      "speaker": "Doctor",
+      "dialogue": "Hello, my name is Raghav and I am the doctor."
+    },
+    {
+      "timestamp": "0:03",
+      "speaker": "Patient",
+      "dialogue": "Hi, my name is Nrup and I'm the patient."
+    }
+  ],
+  "rubric_evaluation": {
+    "critical_action_checklist": {
+      "introduction": true,
+      "chief_complaint": false,
+      "history_of_present_illness": false,
+      "past_medical_history": false,
+      "medications": false,
+      "allergies": false,
+      "social_history": false,
+      "family_history": false,
+      "review_of_systems": false,
+      "physical_exam": false,
+      "differential_diagnosis": false,
+      "plans": false
+    },
+    "empathy_clarity_scale": {
+      "demonstrates_empathy": "Not Observed",
+      "clear_communication": "Unclear",
+      "patient_understanding": "Not Assessed"
+    },
+    "clinical_reasoning": {
+      "data_gathering": "Very Poor",
+      "problem_solving": "Not Applicable",
+      "decision_making": "Not Applicable"
+    }
+  },
+  "aggregate_scores": {
+    "checklist_percent": 8.33,
+    "communication_percent": 0,
+    "post_note_score": 0,
+    "passed": false
+  },
+  "feedback_summary": {
+    "general_feedback": "The encounter ended prematurely. The student only introduced themselves and the patient. This does not constitute a sufficient patient encounter for evaluation.",
+    "strengths": [
+      "The student introduced themselves properly."
+    ],
+    "areas_for_improvement": [
+      "The student needs to continue the encounter by eliciting the patient's chief complaint and history of present illness.",
+      "The student needs to gather a more comprehensive medical history, including past medical history, medications, allergies, social history, and family history.",
+      "The student needs to perform a review of systems and a relevant physical exam.",
+      "The student needs to formulate a differential diagnosis and a plan of care."
+    ],
+    "recommendations": [
+      "Practice full patient encounters, focusing on gathering all necessary information.",
+      "Use a structured approach to patient encounters to ensure all relevant areas are covered."
+    ]
+  }
+}

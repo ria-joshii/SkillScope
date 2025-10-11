@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
-import mysql from 'mysql2/promise';
 import { v4 as uuidv4 } from 'uuid';
 
 export const config = {
@@ -53,34 +52,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const finalPath = path.join(uploadDir, `${sessionId}${path.extname(uploadedFile.originalFilename || '')}`);
     fs.renameSync(uploadedFile.filepath, finalPath);
 
-    // Get teacher ID from request headers or session
-    const teacherId = req.headers['x-user-id'] as string;
-    if (!teacherId) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    // Create database connection
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'osce_feedback',
+    // Save session to JSON file
+    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
+    let sessions = [];
+    try {
+      const data = fs.readFileSync(sessionsFile, 'utf-8');
+      sessions = JSON.parse(data);
+    } catch {}
+    
+    sessions.push({
+      id: sessions.length + 1,
+      unique_id: sessionId,
+      file_name: uploadedFile.originalFilename,
+      file_path: finalPath,
+      status: 'uploaded',
+      created_at: new Date().toISOString()
     });
-
-    // Create session record
-    await connection.execute(
-      'INSERT INTO sessions (teacher_id, student_id, unique_id, file_name, file_path, status) VALUES (?, ?, ?, ?, ?, ?)',
-      [
-        teacherId,
-        teacherId, // For now, teacher uploads for themselves - can be changed later
-        sessionId,
-        uploadedFile.originalFilename,
-        finalPath,
-        'uploaded'
-      ]
-    );
-
-    await connection.end();
+    
+    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
 
     // Trigger async processing
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/process`, {

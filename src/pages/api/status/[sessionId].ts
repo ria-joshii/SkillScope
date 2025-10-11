@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import mysql from 'mysql2/promise';
 import fs from 'fs';
+import path from 'path';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -10,25 +10,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { sessionId } = req.query;
 
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'osce_feedback',
-    });
+    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
+    const sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
+    const session = sessions.find((s: any) => s.unique_id === sessionId);
 
-    const [rows] = await connection.execute(
-      'SELECT status, analysis_path FROM sessions WHERE unique_id = ?',
-      [sessionId]
-    );
-
-    await connection.end();
-
-    if (!Array.isArray(rows) || rows.length === 0) {
+    if (!session) {
       return res.status(404).json({ message: 'Session not found' });
     }
-
-    const session = rows[0] as any;
     let analysis = null;
 
     if (session.status === 'completed' && session.analysis_path) {

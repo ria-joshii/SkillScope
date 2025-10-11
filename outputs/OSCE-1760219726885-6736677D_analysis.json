@@ -1,0 +1,51 @@
+{
+  "transcript": [
+    {
+      "timestamp": "0:01",
+      "speaker": "Raghav",
+      "dialogue": "Hello, my name is Raghav and I am the doctor."
+    },
+    {
+      "timestamp": "0:04",
+      "speaker": "Nirup",
+      "dialogue": "Hi, my name is Nirup and I'm the patient."
+    }
+  ],
+  "rubric_evaluation": {
+    "critical_action_checklist": {
+      "introduction": true,
+      "chief_complaint": false,
+      "history_of_present_illness": false,
+      "past_medical_history": false,
+      "medications": false,
+      "allergies": false,
+      "social_history": false,
+      "family_history": false,
+      "review_of_systems": false,
+      "physical_exam_relevant": false,
+      "differential_diagnosis": false,
+      "investigation_plan": false,
+      "management_plan": false,
+      "counseling_and_education": false,
+      "closing": false
+    },
+    "empathy_clarity_scale": {
+      "demonstrates_empathy": "Not applicable",
+      "clarity_of_communication": "Not applicable",
+      "appropriate_language": "Not applicable",
+      "active_listening": "Not applicable"
+    },
+    "clinical_reasoning": {
+      "problem_identification": "Not applicable",
+      "logical_thinking": "Not applicable",
+      "evidence_based_approach": "Not applicable"
+    }
+  },
+  "aggregate_scores": {
+    "checklist_percent": 7,
+    "communication_percent": 0,
+    "post_note_score": 0,
+    "passed": false
+  },
+  "feedback_summary": "The encounter began with appropriate introductions. However, the student did not proceed to gather any information about the patient's condition, medical history, or other relevant details.  Therefore, the encounter is significantly incomplete. The student needs to practice obtaining a comprehensive patient history. The student should actively seek out the chief complaint, explore the history of the present illness, and gather past medical, social, and family history. They need to develop a structured approach to patient interviews."
+}

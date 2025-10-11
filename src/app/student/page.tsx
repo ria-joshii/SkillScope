@@ -8,7 +8,6 @@ export default function StudentPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [session, setSession] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState("");
   
   const router = useRouter();
 
@@ -30,7 +29,6 @@ export default function StudentPage() {
     setIsLoading(true);
     setError("");
     setSession(null);
-    setPdfUrl("");
 
     try {
       const response = await fetch(`/api/sessions/${sessionId}`);
@@ -38,9 +36,6 @@ export default function StudentPage() {
 
       if (response.ok && data.success) {
         setSession(data.session);
-        if (data.session.pdf_path) {
-          setPdfUrl(data.session.pdf_path);
-        }
       } else {
         setError(data.message || "Session not found");
       }
@@ -146,13 +141,12 @@ export default function StudentPage() {
                 </div>
               </div>
 
-              {session.status === 'completed' && pdfUrl && (
+              {session.status === 'completed' && (
                 <div className="mt-6">
                   <h3 className="text-md font-medium text-gray-900 mb-2">Feedback Report</h3>
                   <a
-                    href={pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`/api/download/${session.unique_id}`}
+                    download
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
                   >
                     Download PDF Report
