@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Mock data for admin dashboard
 const mockAdminData = {
@@ -56,31 +57,61 @@ const studentList = [
 ];
 
 export default function AdminDashboard() {
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const router = useRouter();
 
   useEffect(() => {
-    const userRole = localStorage.getItem('userRole');
-    if (!userRole || userRole !== 'admin') {
+    const role = localStorage.getItem('userRole');
+    if (!role || role !== 'admin') {
       router.push('/login');
+      return;
     }
+    setUserRole(role);
+    setIsLoading(false);
   }, [router]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('authToken');
+    router.push('/login');
+  };
+
   const handleSettings = () => {
-    alert("The administrator can access system settings and configuration options.");
+    alert('Opening system settings...');
   };
 
   const handleExportReport = () => {
-    alert("The administrator is exporting a comprehensive analytics report.");
+    alert('Exporting comprehensive report...');
   };
 
   const handleReviewCase = (caseId: string) => {
-    alert(`The administrator is opening detailed review for case ${caseId}.`);
+    alert(`Reviewing case ${caseId}...`);
   };
 
   const handleApproveCase = (caseId: string) => {
-    alert(`The administrator has approved case ${caseId}.`);
+    alert(`Approving case ${caseId}...`);
   };
+
+  const handleRejectCase = (caseId: string) => {
+    alert(`Rejecting case ${caseId}...`);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!userRole) {
+    return null;
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -116,11 +147,7 @@ export default function AdminDashboard() {
             </div>
             
             <button
-              onClick={() => {
-                localStorage.removeItem("userRole");
-                localStorage.removeItem("authToken");
-                window.location.href = "/login";
-              }}
+              onClick={handleLogout}
               className="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-medium hover:bg-slate-200 transition-colors"
             >
               Logout
