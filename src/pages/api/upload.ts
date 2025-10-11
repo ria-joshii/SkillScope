@@ -82,8 +82,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await connection.end();
 
-    // TODO: Trigger backend processing here
-    // This would typically send the file to your Python backend for analysis
+    // Trigger async processing
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/process`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, filePath: finalPath })
+    }).catch(err => console.error('Processing trigger failed:', err));
 
     return res.status(200).json({
       success: true,

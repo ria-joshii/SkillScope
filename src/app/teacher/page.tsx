@@ -6,9 +6,12 @@ import { useRouter } from "next/navigation";
 export default function TeacherPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [sessions, setSessions] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [processingStatus, setProcessingStatus] = useState<string>("");
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -51,6 +54,30 @@ export default function TeacherPage() {
     }
   };
 
+  const checkProcessingStatus = async (sessionId: string) => {
+    try {
+      const response = await fetch(`/api/status/${sessionId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setProcessingStatus(data.status);
+        
+        if (data.status === 'processing') {
+          setTimeout(() => checkProcessingStatus(sessionId), 5000);
+        } else if (data.status === 'completed') {
+          setSuccess(`Analysis complete! Session ID: ${sessionId}`);
+          setCurrentSessionId(null);
+          loadSessions();
+        } else if (data.status === 'failed') {
+          setError('Processing failed. Please try again.');
+          setCurrentSessionId(null);
+        }
+      }
+    } catch (err) {
+      console.error('Status check failed:', err);
+    }
+  };
+
   const handleUpload = async () => {
     if (!selectedFile) {
       setError("Please select a file first");
@@ -58,11 +85,17 @@ export default function TeacherPage() {
     }
 
     setIsUploading(true);
+    setUploadProgress(0);
     setError("");
     setSuccess("");
+    setProcessingStatus("");
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => Math.min(prev + 10, 90));
+    }, 500);
 
     try {
       const response = await fetch("/api/upload", {
@@ -70,22 +103,29 @@ export default function TeacherPage() {
         body: formData,
       });
 
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setSuccess(`File uploaded successfully. Session ID: ${data.sessionId}`);
+        setSuccess(`File uploaded! Processing started...`);
+        setCurrentSessionId(data.sessionId);
         setSelectedFile(null);
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        loadSessions(); // Refresh sessions list
+        loadSessions();
+        checkProcessingStatus(data.sessionId);
       } else {
         setError(data.message || "Upload failed");
       }
     } catch (err) {
+      clearInterval(progressInterval);
       setError("Network error. Please try again.");
     } finally {
       setIsUploading(false);
+      setTimeout(() => setUploadProgress(0), 2000);
     }
   };
 
@@ -118,40 +158,103 @@ export default function TeacherPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Upload Section */}
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Upload OSCE Recording</h2>
-          
-          <div className="space-y-4">
+        <div className="bg-white shadow-lg rounded-xl p-8 mb-8 border border-gray-100">
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
             <div>
+              <h2 className="text-xl font-bold text-gray-900">Upload OSCE Recording</h2>
+              <p className="text-sm text-gray-500">Upload video (MP4) or audio (MP3) files for AI analysis</p>
+            </div>
+          </div>
+          
+          <div className="space-y-5">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-red-400 transition-colors">
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".mp4,.mp3"
+                accept=".mp4,.mp3,.mov,.m4a"
                 onChange={handleFileSelect}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 file:cursor-pointer cursor-pointer"
               />
             </div>
 
             {selectedFile && (
-              <div className="text-sm text-gray-600">
-                Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center">
+                <svg className="w-5 h-5 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clipRule="evenodd" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-blue-900">{selectedFile.name}</p>
+                  <p className="text-xs text-blue-700">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                </div>
+              </div>
+            )}
+
+            {uploadProgress > 0 && uploadProgress < 100 && (
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Uploading...</span>
+                  <span className="text-gray-900 font-medium">{uploadProgress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div className="bg-red-600 h-2.5 rounded-full transition-all duration-300" style={{width: `${uploadProgress}%`}}></div>
+                </div>
+              </div>
+            )}
+
+            {processingStatus === 'processing' && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center">
+                <svg className="animate-spin h-5 w-5 text-yellow-600 mr-3" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span className="text-sm font-medium text-yellow-800">AI is analyzing your OSCE recording...</span>
               </div>
             )}
 
             {error && (
-              <div className="text-red-600 text-sm">{error}</div>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+                <svg className="w-5 h-5 text-red-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-red-800">{error}</span>
+              </div>
             )}
 
             {success && (
-              <div className="text-green-600 text-sm">{success}</div>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+                <svg className="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-green-800">{success}</span>
+              </div>
             )}
 
             <button
               onClick={handleUpload}
               disabled={!selectedFile || isUploading}
-              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-semibold hover:from-red-700 hover:to-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg flex items-center justify-center"
             >
-              {isUploading ? "Uploading..." : "Upload File"}
+              {isUploading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  Upload & Analyze
+                </>
+              )}
             </button>
           </div>
         </div>

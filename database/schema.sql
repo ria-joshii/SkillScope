@@ -23,6 +23,7 @@ CREATE TABLE sessions (
     file_path VARCHAR(500),
     status ENUM('uploaded', 'processing', 'completed', 'failed') DEFAULT 'uploaded',
     pdf_path VARCHAR(500),
+    analysis_path VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (teacher_id) REFERENCES users(id),
