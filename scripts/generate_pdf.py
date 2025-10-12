@@ -117,7 +117,12 @@ def build_pdf(input_json: Path, output_pdf: Path, title: str):
         
         for category, items in checklist.items():
             if items and isinstance(items, list):
-                story.append(Paragraph(f"<b>{category.replace('_', ' ').title()}</b>", h3))
+                # Fix camelCase and underscore formatting
+                formatted_category = category.replace('_', ' ')
+                # Add spaces before capital letters in camelCase
+                import re
+                formatted_category = re.sub(r'([a-z])([A-Z])', r'\1 \2', formatted_category)
+                story.append(Paragraph(f"<b>{formatted_category.title()}</b>", h3))
                 for item in items:
                     if isinstance(item, dict):
                         met = item.get("met", False)
@@ -138,7 +143,12 @@ def build_pdf(input_json: Path, output_pdf: Path, title: str):
         
         for domain, items in comm.items():
             if items and isinstance(items, list):
-                story.append(Paragraph(f"<b>{domain.replace('_', ' ').title()}</b>", h3))
+                # Fix camelCase and underscore formatting
+                formatted_domain = domain.replace('_', ' ')
+                # Add spaces before capital letters in camelCase
+                import re
+                formatted_domain = re.sub(r'([a-z])([A-Z])', r'\1 \2', formatted_domain)
+                story.append(Paragraph(f"<b>{formatted_domain.title()}</b>", h3))
                 for item in items:
                     if isinstance(item, dict):
                         met = item.get("met", False)
