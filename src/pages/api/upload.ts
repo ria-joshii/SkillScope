@@ -67,14 +67,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     await saveSessions(sessions);
 
-    // Trigger async processing
-    const { spawn } = require('child_process');
-    const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
-    const child = spawn('node', [processScript, sessionId, finalPath], { 
-      detached: true, 
-      stdio: 'ignore' 
-    });
-    child.unref();
+    // Trigger async processing (only works locally, not on Amplify)
+    if (process.env.NODE_ENV !== 'production') {
+      const { spawn } = require('child_process');
+      const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
+      const child = spawn('node', [processScript, sessionId, finalPath], { 
+        detached: true, 
+        stdio: 'ignore' 
+      });
+      child.unref();
+    }
 
     return res.status(200).json({
       success: true,
