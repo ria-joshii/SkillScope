@@ -2,17 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 
-const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-
-function getSessions() {
-  try {
-    const data = fs.readFileSync(sessionsFile, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
 function getSessions() {
   try {
     const data = fs.readFileSync(path.join(process.cwd(), 'data', 'sessions.json'), 'utf-8');
