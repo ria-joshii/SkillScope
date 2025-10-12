@@ -52,9 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const finalPath = path.join(uploadDir, `${sessionId}${path.extname(uploadedFile.originalFilename || '')}`);
     fs.renameSync(uploadedFile.filepath, finalPath);
 
-    // Save session
-    const { getSessions, saveSessions } = await import('../../lib/storage');
-    const sessions = await getSessions();
+    // Save session to JSON file
+    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
+    let sessions = [];
+    try {
+      const data = fs.readFileSync(sessionsFile, 'utf-8');
+      sessions = JSON.parse(data);
+    } catch {}
     
     sessions.push({
       id: sessions.length + 1,
@@ -65,18 +69,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       created_at: new Date().toISOString()
     });
     
-    await saveSessions(sessions);
+    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
 
-    // Trigger async processing (only works locally, not on Amplify)
-    if (process.env.NODE_ENV !== 'production') {
-      const { spawn } = require('child_process');
-      const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
-      const child = spawn('node', [processScript, sessionId, finalPath], { 
-        detached: true, 
-        stdio: 'ignore' 
-      });
-      child.unref();
-    }
+    // Trigger async processing
+    const { spawn } = require('child_process');
+    const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
+    const child = spawn('node', [processScript, sessionId, finalPath], { 
+      detached: true, 
+      stdio: 'ignore' 
+    });
+    child.unref();
 
     return res.status(200).json({
       success: true,

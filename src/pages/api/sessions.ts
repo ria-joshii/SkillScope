@@ -13,11 +13,19 @@ function getSessions() {
   }
 }
 
+function getSessions() {
+  try {
+    const data = fs.readFileSync(path.join(process.cwd(), 'data', 'sessions.json'), 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
-      const { getSessions } = await import('../../lib/storage');
-      const sessions = await getSessions();
+      const sessions = getSessions();
       return res.status(200).json({
         success: true,
         sessions: sessions.sort((a: any, b: any) => 
