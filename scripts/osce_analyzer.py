@@ -8,7 +8,7 @@ from typing import List
 import google.generativeai as genai
 from google.api_core.exceptions import GoogleAPICallError, DeadlineExceeded
 
-API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyCx7loNOONvL6GWvj75EsGm0y89gArIKoU")
+API_KEY = os.getenv("GEMINI_API_KEY", "-")
 PRIMARY_MODEL = os.getenv("GEMINI_MODEL_PRIMARY", "gemini-2.5-flash")
 FALLBACK_MODEL = os.getenv("GEMINI_MODEL_FALLBACK", "gemini-2.5-pro-preview-03-25")
 DEFAULT_TIMEOUT_SEC = int(os.getenv("GEMINI_TIMEOUT_SEC", "1800"))
