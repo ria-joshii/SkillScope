@@ -5,7 +5,13 @@ import path from 'path';
 const USE_S3 = process.env.USE_S3 === 'true';
 const BUCKET = process.env.S3_BUCKET || 'osce-files';
 
-const s3Client = USE_S3 ? new S3Client({ region: process.env.AWS_REGION || 'us-east-1' }) : null;
+const s3Client = USE_S3 ? new S3Client({ 
+  region: process.env.S3_REGION || 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
+  }
+}) : null;
 
 export async function getSessions(): Promise<any[]> {
   if (USE_S3 && s3Client) {
