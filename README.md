@@ -20,6 +20,7 @@ mysql -u root -p < database/schema.sql
 
 ### 2. Environment Configuration
 
+
 Create a `.env.local` file:
 
 ```env
@@ -28,6 +29,15 @@ DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=osce_feedback
 ```
+
+
+### 2a. setup 
+cd scripts && pip3 install -r requirements.txt && cd ..
+mkdir -p uploads outputs
+chmod +x scripts/osce_analyzer.py
+npm run dev
+
+
 
 ### 3. Install Dependencies
 
