@@ -9,8 +9,8 @@ import google.generativeai as genai
 from google.api_core.exceptions import GoogleAPICallError, DeadlineExceeded
 
 API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyCx7loNOONvL6GWvj75EsGm0y89gArIKoU")
-PRIMARY_MODEL = os.getenv("GEMINI_MODEL_PRIMARY", "gemini-2.0-flash-exp")
-FALLBACK_MODEL = os.getenv("GEMINI_MODEL_FALLBACK", "gemini-1.5-flash")
+PRIMARY_MODEL = os.getenv("GEMINI_MODEL_PRIMARY", "gemini-2.5-flash")
+FALLBACK_MODEL = os.getenv("GEMINI_MODEL_FALLBACK", "gemini-2.5-pro-preview-03-25")
 DEFAULT_TIMEOUT_SEC = int(os.getenv("GEMINI_TIMEOUT_SEC", "1800"))
 MAX_RETRIES = int(os.getenv("GEMINI_MAX_RETRIES", "3"))
 RETRY_BASE_DELAY = float(os.getenv("GEMINI_RETRY_BASE", "5.0"))
@@ -203,9 +203,16 @@ def main():
     input_file = Path(sys.argv[1])
     output_dir = Path(sys.argv[2])
     
+    # Choose model based on file type
+    file_ext = input_file.suffix.lower()
+    if file_ext in ['.mp3', '.m4a', '.wav']:
+        model_to_use = "gemini-2.5-pro-preview-03-25"  # Pro model for audio
+    else:  # MP4, MOV, etc.
+        model_to_use = "gemini-2.5-flash"  # Flash model for video
+    
     uploaded = genai.upload_file(path=str(input_file))
     active_file = wait_until_active(uploaded.name)
-    text = generate_with_retries(PRIMARY_MODEL, active_file, DEFAULT_TIMEOUT_SEC)
+    text = generate_with_retries(model_to_use, active_file, DEFAULT_TIMEOUT_SEC)
     
     output_dir.mkdir(parents=True, exist_ok=True)
     outfile = output_dir / f"{input_file.stem}_analysis.json"
