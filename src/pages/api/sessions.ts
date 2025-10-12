@@ -16,7 +16,8 @@ function getSessions() {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
-      const sessions = getSessions();
+      const { getSessions } = await import('../../lib/storage');
+      const sessions = await getSessions();
       return res.status(200).json({
         success: true,
         sessions: sessions.sort((a: any, b: any) => 

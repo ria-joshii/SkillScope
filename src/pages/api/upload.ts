@@ -52,13 +52,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const finalPath = path.join(uploadDir, `${sessionId}${path.extname(uploadedFile.originalFilename || '')}`);
     fs.renameSync(uploadedFile.filepath, finalPath);
 
-    // Save session to JSON file
-    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-    let sessions = [];
-    try {
-      const data = fs.readFileSync(sessionsFile, 'utf-8');
-      sessions = JSON.parse(data);
-    } catch {}
+    // Save session
+    const { getSessions, saveSessions } = await import('../../lib/storage');
+    const sessions = await getSessions();
     
     sessions.push({
       id: sessions.length + 1,
@@ -69,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       created_at: new Date().toISOString()
     });
     
-    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
+    await saveSessions(sessions);
 
     // Trigger async processing
     const { spawn } = require('child_process');
