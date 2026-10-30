@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+import type { Session } from "@/lib/sessions";
+
 export default function StudentPage() {
   const [sessionId, setSessionId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Pick<Session, "id" | "unique_id" | "file_name" | "status" | "pdf_path" | "created_at" | "updated_at"> | null>(null);
   
   const router = useRouter();
 

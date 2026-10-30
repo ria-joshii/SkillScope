@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
-import path from 'path';
+import { getSessions } from '@/lib/sessions';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -9,10 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { sessionId } = req.query;
 
+  if (typeof sessionId !== 'string' || !sessionId) {
+    return res.status(400).json({ message: 'Session ID is required' });
+  }
+
   try {
-    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-    const sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
-    const session = sessions.find((s: any) => s.unique_id === sessionId);
+    const sessions = await getSessions();
+    const session = sessions.find(s => s.unique_id === sessionId);
 
     if (!session) {
       return res.status(404).json({ message: 'Session not found' });
@@ -35,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (error) {
     console.error('Status check error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: 'Failed to check status',
       error: error instanceof Error ? error.message : 'Unknown error'
     });

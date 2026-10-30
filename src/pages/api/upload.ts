@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
+import { spawn } from 'child_process';
+import { getSessions, saveSessions } from '@/lib/sessions';
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -29,10 +31,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       maxFileSize: 100 * 1024 * 1024, // 100MB
     });
 
-    const [fields, files] = await form.parse(req);
-    
+    const [, files] = await form.parse(req);
+
     const uploadedFile = Array.isArray(files.file) ? files.file[0] : files.file;
-    
+
     if (!uploadedFile) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
@@ -40,26 +42,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Validate file type
     const allowedTypes = ['video/mp4', 'video/quicktime', 'audio/mpeg', 'audio/mp3'];
     if (!allowedTypes.includes(uploadedFile.mimetype || '')) {
-      return res.status(400).json({ 
-        message: 'Invalid file type. Only MP4 video and MP3 audio files are allowed.' 
+      return res.status(400).json({
+        message: 'Invalid file type. Only MP4 video and MP3 audio files are allowed.'
       });
     }
 
     // Generate unique session ID
     const sessionId = `OSCE-${Date.now()}-${uuidv4().substring(0, 8).toUpperCase()}`;
-    
+
     // Move file to final location
     const finalPath = path.join(uploadDir, `${sessionId}${path.extname(uploadedFile.originalFilename || '')}`);
     fs.renameSync(uploadedFile.filepath, finalPath);
 
-    // Save session to JSON file
-    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-    let sessions = [];
-    try {
-      const data = fs.readFileSync(sessionsFile, 'utf-8');
-      sessions = JSON.parse(data);
-    } catch {}
-    
+    const sessions = await getSessions();
+
     sessions.push({
       id: sessions.length + 1,
       unique_id: sessionId,
@@ -68,15 +64,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       status: 'uploaded',
       created_at: new Date().toISOString()
     });
-    
-    fs.writeFileSync(sessionsFile, JSON.stringify(sessions, null, 2));
+
+    await saveSessions(sessions);
 
     // Trigger async processing
-    const { spawn } = require('child_process');
     const processScript = path.join(process.cwd(), 'scripts', 'process_async.js');
-    const child = spawn('node', [processScript, sessionId, finalPath], { 
-      detached: true, 
-      stdio: 'ignore' 
+    const child = spawn('node', [processScript, sessionId, finalPath], {
+      detached: true,
+      stdio: 'ignore'
     });
     child.unref();
 
@@ -88,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } catch (error) {
     console.error('Upload error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: 'File upload failed',
       error: error instanceof Error ? error.message : 'Unknown error'
     });

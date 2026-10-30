@@ -1,23 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
-
-function getSessions() {
-  try {
-    const data = fs.readFileSync(path.join(process.cwd(), 'data', 'sessions.json'), 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
+import { getSessions } from '@/lib/sessions';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
-      const sessions = getSessions();
+      const sessions = await getSessions();
       return res.status(200).json({
         success: true,
-        sessions: sessions.sort((a: any, b: any) => 
+        sessions: sessions.sort((a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         )
       });

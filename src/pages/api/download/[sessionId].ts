@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
-import path from 'path';
+import { getSessions } from '@/lib/sessions';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -14,20 +14,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    // Read sessions data
-    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-    let sessions = [];
-    
-    try {
-      const data = fs.readFileSync(sessionsFile, 'utf-8');
-      sessions = JSON.parse(data);
-    } catch {
-      return res.status(404).json({ message: 'Sessions not found' });
-    }
+    const session = getSessions().find(item => item.unique_id === sessionId);
 
-    // Find the session
-    const session = sessions.find((s: any) => s.unique_id === sessionId);
-    
     if (!session) {
       return res.status(404).json({ message: 'Session not found' });
     }
@@ -45,7 +33,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Set headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${sessionId}_report.pdf"`);
-    
+
     // Stream the PDF file
     const fileStream = fs.createReadStream(pdfPath);
     fileStream.pipe(res);

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { getSessions } from '@/lib/sessions';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -14,14 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const sessionsFile = path.join(process.cwd(), 'data', 'sessions.json');
-    const sessions = JSON.parse(fs.readFileSync(sessionsFile, 'utf-8'));
-    const session = sessions.find((s: any) => s.unique_id === sessionId);
+    const sessions = await getSessions();
+    const session = sessions.find(s => s.unique_id === sessionId);
 
     if (!session) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: 'Session not found' 
+        message: 'Session not found'
       });
     }
 
